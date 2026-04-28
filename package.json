@@ -1,0 +1,20 @@
+{
+  "name": "whatsapp-bot-afiliados",
+  "version": "1.0.0",
+  "description": "Bot WhatsApp para atendimento de afiliados com Gemini + Evolution API",
+  "main": "src/index.js",
+  "scripts": {
+    "start": "node src/index.js",
+    "dev": "nodemon src/index.js"
+  },
+  "dependencies": {
+    "axios": "^1.7.2",
+    "express": "^4.19.2"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.4"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}
