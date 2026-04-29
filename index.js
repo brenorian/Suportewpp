@@ -47,11 +47,11 @@ Para se tornar afiliado da Void:
 
 | Casa | Baseline | Comissão |
 |------|----------|----------|
-| JonBet | R$50 | 170% |
-| Blaze | R$50 | 190% |
-| Sportingbet | R$30 | 180% |
-| Superbet | R$50 | 200% |
-| Lottu | R$5 | 65% |
+| JonBet | R$50 | R$ 170 |
+| Blaze | R$50 | R$ 190 |
+| Sportingbet | R$30 | R$ 180 |
+| Superbet | R$50 | R$ 200 |
+| Lottu | R$5 | R$ 65 |
 
 Todos os acordos possuem rollover de apenas 1x.
 
