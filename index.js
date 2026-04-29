@@ -7,7 +7,7 @@ app.use(express.json());
 // =============================================
 // CONFIGURAÇÕES — variáveis de ambiente
 // =============================================
-const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
+const OPENROUTER_API_KEY = process.env.OPENROUTER_API_KEY;
 const ZAPI_INSTANCE_ID = process.env.ZAPI_INSTANCE_ID;
 const ZAPI_TOKEN = process.env.ZAPI_TOKEN;
 const ZAPI_CLIENT_TOKEN = process.env.ZAPI_CLIENT_TOKEN;
@@ -53,7 +53,7 @@ function getHistorico(telefone) {
 
 function adicionarMensagem(telefone, role, texto) {
   const historico = getHistorico(telefone);
-  historico.push({ role, parts: [{ text: texto }] });
+  historico.push({ role, content: texto });
   if (historico.length > 20) historico.splice(0, 2);
 }
 
@@ -64,31 +64,29 @@ async function gerarResposta(telefone, mensagemUsuario) {
   adicionarMensagem(telefone, "user", mensagemUsuario);
   const historico = getHistorico(telefone);
 
-  // Converte histórico pro formato OpenAI (usado pelo OpenRouter)
   const messages = [
     { role: "system", content: SYSTEM_PROMPT },
-    ...historico.map((m) => ({
-      role: m.role === "model" ? "assistant" : "user",
-      content: m.parts[0].text,
-    })),
+    ...historico,
   ];
 
   const response = await axios.post(
     "https://openrouter.ai/api/v1/chat/completions",
     {
-      model: "google/gemini-2.0-flash-exp:free", // modelo gratuito
+      model: "meta-llama/llama-3.1-8b-instruct:free",
       messages,
     },
     {
       headers: {
-        Authorization: `Bearer ${process.env.OPENROUTER_API_KEY}`,
+        Authorization: `Bearer ${OPENROUTER_API_KEY}`,
         "Content-Type": "application/json",
+        "HTTP-Referer": "https://moskitao.com.br",
+        "X-Title": "Moskitao Bot",
       },
     }
   );
 
   const resposta = response.data.choices[0].message.content;
-  adicionarMensagem(telefone, "model", resposta);
+  adicionarMensagem(telefone, "assistant", resposta);
   return resposta;
 }
 
@@ -143,6 +141,9 @@ app.post("/webhook", async (req, res) => {
     console.log(`✅ Respondido [${telefone}]: ${resposta.substring(0, 80)}...`);
   } catch (err) {
     console.error("❌ Erro no webhook:", err.message);
+    if (err.response) {
+      console.error("Detalhes:", JSON.stringify(err.response.data));
+    }
   }
 });
 
