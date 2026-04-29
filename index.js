@@ -58,20 +58,36 @@ function adicionarMensagem(telefone, role, texto) {
 }
 
 // =============================================
-// GEMINI — gera resposta
+// OPENROUTER — gera resposta
 // =============================================
 async function gerarResposta(telefone, mensagemUsuario) {
   adicionarMensagem(telefone, "user", mensagemUsuario);
   const historico = getHistorico(telefone);
 
-  const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${GEMINI_API_KEY}`;
-  const body = {
-    system_instruction: { parts: [{ text: SYSTEM_PROMPT }] },
-    contents: historico,
-  };
+  // Converte histórico pro formato OpenAI (usado pelo OpenRouter)
+  const messages = [
+    { role: "system", content: SYSTEM_PROMPT },
+    ...historico.map((m) => ({
+      role: m.role === "model" ? "assistant" : "user",
+      content: m.parts[0].text,
+    })),
+  ];
 
-  const response = await axios.post(url, body);
-  const resposta = response.data.candidates[0].content.parts[0].text;
+  const response = await axios.post(
+    "https://openrouter.ai/api/v1/chat/completions",
+    {
+      model: "google/gemini-2.0-flash-exp:free", // modelo gratuito
+      messages,
+    },
+    {
+      headers: {
+        Authorization: `Bearer ${process.env.OPENROUTER_API_KEY}`,
+        "Content-Type": "application/json",
+      },
+    }
+  );
+
+  const resposta = response.data.choices[0].message.content;
   adicionarMensagem(telefone, "model", resposta);
   return resposta;
 }
