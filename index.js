@@ -53,7 +53,7 @@ Para se tornar afiliado da Void:
 | Superbet | R$50 | R$ 200 |
 | Lottu | R$5 | R$ 65 |
 
-Todos os acordos possuem rollover de apenas 1x.
+Todos os acordos possuem rollover de apenas 1x ou seja o rollover referido e basicamente um requisito anti fraude de cpa para ativar o cpa o jogador tem que apostar no minimo a baseline e os saques dos afiliados sao feitos em dinheiro real .
 
 ---
 
