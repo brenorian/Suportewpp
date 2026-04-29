@@ -72,7 +72,7 @@ async function gerarResposta(telefone, mensagemUsuario) {
   const response = await axios.post(
     "https://openrouter.ai/api/v1/chat/completions",
     {
-      model: "meta-llama/llama-3.1-8b-instruct:free",
+      model: "google/gemini-2.5-flash-preview-05-20",
       messages,
     },
     {
